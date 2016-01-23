@@ -1,0 +1,166 @@
+
+.menubar {
+    display: block;
+    height: 5vh;
+    width: 100%;
+    background: green;
+}
+
+.menubar .menubar-item {
+    display: inline-block;
+    min-width: 150px;
+    height: 100%;
+    font-family: Roboto, Arial, sans-serif;
+    line-height: 5vh;
+    text-transform: uppercase;
+    color: white;
+    text-align: center;
+}
+
+.sidebar {
+    height: 95vh;
+    width: 20%;
+    display: inline-block;
+    background: blue;
+    text-align: center;
+}
+
+.sidebar-image, .sidebar-add-button {
+    width: 200px;
+    height: 132px;
+    display: block;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+}
+
+.sidebar-image.selected {
+    border: 2px solid red;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.sidebar-add-button {
+    position: relative;
+    background: none;
+}
+
+.sidebar-add-button:before {
+    content: '+';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    line-height: 132px;
+    font-size: 180px;
+    color: crimson;
+}
+
+.editor {
+    height: 95vh;
+    width: 80%;
+    display: inline-block;
+    background: red;
+    vertical-align: top;
+}
+
+.current-image {
+    position: relative;
+    background: url('http://thumb7.shutterstock.com/display_pic_with_logo/64260/292334429/stock-photo-hospital-profession-people-and-medicine-concept-group-of-happy-doctors-at-hospital-292334429.jpg');
+    background-size: cover;
+    margin-top: 10%;
+    width: 640px;
+    height: 480px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.current-image .text {
+    font-size: 50px;
+    font-family: Comic Sans, Comic Sans MS, cursive;
+    color: green;
+    position: absolute;
+    cursor: default;
+}
+
+.current-image .text.selected {
+    border: 1px dashed black;
+    box-sizing: border-box;
+    cursor: move;
+}
+
+.current-image .text.selected[contenteditable="true"] {
+    cursor: text;
+}
+
+.editor-controls {
+    border: 1px solid black;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+}
+
+.control span {
+    line-height: 40px;
+    font-family: Roboto, Arial, sans-serif;
+    margin-left: 20px;
+}
+
+.control-font-size, .control-color-picker {
+    width: 100%;
+    height: 40px;
+    background: pink;
+    display: block;
+}
+
+.control-color-picker {
+    background: orange;
+}
+
+.color-swatch {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background: attr(data-color string);
+    border: 1px solid black;
+    margin-top: 8px;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.color-swatch.selected {
+    box-sizing: border-box;
+    border: 1px solid white;
+}
+
+.red {
+    background: red;
+}
+
+.orange {
+    background: orange;
+}
+
+.yellow {
+    background: yellow;
+}
+
+.green {
+    background: green;
+}
+
+.blue {
+    background: blue;
+}
+
+.indigo {
+    background: indigo;
+}
+
+.violet {
+    background: violet;
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>You Don't Surf</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="reset.css">
+</head>
+<body ng-app="ydsApp" ng-controller="YdsController as yds">	
+    <div class="menubar">
+        <div class="menubar-item">New</div><!--
+        --><div class="menubar-item">Save</div><!--
+        --><div class="menubar-item">Post to imgur</div>
+    </div>
+    <div class="sidebar">
+        <div class="sidebar-image" 
+             style="background:{{'url(' + slide.imageUrl + ')'}};background-size:cover;" 
+             ng-class="{'selected':yds.currentImage===$index}"
+             ng-click="yds.setCurrentImage($index)"
+             ng-repeat="slide in yds.slides"></div>
+
+        <div class="sidebar-add-button"></div>
+    </div><!--
+    --><div class="editor">
+        <div class="current-image" ng-click="yds.clearSelection($event)" style="background:{{'url(' + yds.slides[yds.currentImage].imageUrl + ')'}};background-size:cover;">
+            <div class="text" 
+                 contenteditable="{{yds.selectedText===$index&&yds.isContentEditable}}"
+                 style="top:{{line.top+'px'}};left:{{line.left+'px'}};color:{{line.color}};font-size:{{line.size+'px'}}"
+                 ng-dblclick="yds.isContentEditable=true"
+                 ng-class="{'selected':yds.selectedText===$index}"
+                 ng-click="yds.editText($index, $event)"
+                 ng-repeat="line in yds.slides[yds.currentImage].text"
+                 ng-model="line.content">{{line.content}}</div>
+            <!--div class="text selected" contenteditable="true" style="top: 300px;left 130px;">But we hate Harold!</div-->
+        </div>
+        <div class="editor-controls">
+            <div class="control control-font-size">
+                <span>Font Size:</span>
+                <input ng-model="yds.slides[yds.currentImage].text[yds.selectedText].size" type="number" />
+            </div>
+            <div class="control control-color-picker">
+                <span>Font Color:</span>
+                <span ng-click="yds.setColor('red')" ng-class="{'selected':yds.isColor('red')}" class="color-swatch red"></span>
+                <span ng-click="yds.setColor('orange')" ng-class="{'selected':yds.isColor('orange')}" class="color-swatch orange"></span>
+                <span ng-click="yds.setColor('yellow')" ng-class="{'selected':yds.isColor('yellow')}" class="color-swatch yellow"></span>
+                <span ng-click="yds.setColor('green')" ng-class="{'selected':yds.isColor('green')}" class="color-swatch green"></span>
+                <span ng-click="yds.setColor('blue')" ng-class="{'selected':yds.isColor('blue')}" class="color-swatch blue"></span>
+                <span ng-click="yds.setColor('indigo')" ng-class="{'selected':yds.isColor('indigo')}" class="color-swatch indigo"></span>
+                <span ng-click="yds.setColor('violet')" ng-class="{'selected':yds.isColor('violet')}" class="color-swatch violet"></span>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

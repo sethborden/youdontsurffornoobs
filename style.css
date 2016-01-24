@@ -3,10 +3,11 @@
     display: block;
     height: 5vh;
     width: 100%;
-    background: green;
+    background: #65BCF1;
+    position: relative;
 }
 
-.menubar .menubar-item {
+.menubar .menubar-item, .menubar-title {
     display: inline-block;
     min-width: 150px;
     height: 100%;
@@ -15,14 +16,67 @@
     text-transform: uppercase;
     color: white;
     text-align: center;
+    cursor: pointer;
+}
+
+.menubar-item.disabled {
+    color: #aaa;
+}
+
+.menubar-title {
+    position: absolute;
+    font-size: 20px;
+    right: 0;
+    background: #393939;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+}
+
+.dropdown-menu.active {
+    display: block;
+    position: absolute;
+    margin-top: 1px;
+    width: 100%;
+}
+
+.dropdown-menu .dropdown-item {
+    height: 50px;
+    line-height: 50px 
+    width: 100%;
+    background: black;
+    display: block;
+    border: 1px solid white; 
+    color: white;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background: #333;
+}
+
+.dropdown-menu .dropdown-item:first-of-type {
+    border-top: none;
 }
 
 .sidebar {
     height: 95vh;
     width: 20%;
     display: inline-block;
-    background: blue;
+    background: #393939;
     text-align: center;
+    overflow-y: auto;
+    transition: 0.3s;
+}
+
+.sidebar.drop-target {
+    background: crimson;
 }
 
 .sidebar-image, .sidebar-add-button {
@@ -33,10 +87,11 @@
     margin-left: auto;
     margin-right: auto;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .sidebar-image.selected {
-    border: 2px solid red;
+    border: 2px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
 }
@@ -55,14 +110,14 @@
     top: 0;
     line-height: 132px;
     font-size: 180px;
-    color: crimson;
+    color: #ccc;
 }
 
 .editor {
     height: 95vh;
     width: 80%;
     display: inline-block;
-    background: red;
+    background: #F9F9F9;
     vertical-align: top;
 }
 
@@ -71,8 +126,8 @@
     background: url('http://thumb7.shutterstock.com/display_pic_with_logo/64260/292334429/stock-photo-hospital-profession-people-and-medicine-concept-group-of-happy-doctors-at-hospital-292334429.jpg');
     background-size: cover;
     margin-top: 10%;
-    width: 640px;
-    height: 480px;
+    width: 80%;
+    height: 65%;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -84,13 +139,32 @@
     color: green;
     position: absolute;
     cursor: default;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.0);
 }
 
 .current-image .text.selected {
     border: 1px dashed black;
-    box-sizing: border-box;
     cursor: move;
 }
+
+//.current-image .text.selected:after {
+//    content: '\21bb';
+//    position: absolute;
+//    display: block;
+//    bottom: -22px;
+//    right: -22px;
+//    height: 20px;
+//    width: 20px;
+//    background: white;
+//    border: 1px solid black;
+//    color: black;
+//    padding-top: 0;
+//    font-size: 20px;
+//    text-align: center;
+//}
 
 .current-image .text.selected[contenteditable="true"] {
     cursor: text;
@@ -113,12 +187,13 @@
 .control-font-size, .control-color-picker {
     width: 100%;
     height: 40px;
-    background: pink;
+    background: #7ECFFE;
+    color: white;
     display: block;
 }
 
 .control-color-picker {
-    background: orange;
+    background: #7ECFFE;
 }
 
 .color-swatch {

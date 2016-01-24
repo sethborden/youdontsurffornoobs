@@ -4,38 +4,52 @@
     <meta charset="UTF-8">
     <title>You Don't Surf</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-sanitize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="reset.css">
 </head>
-<body ng-app="ydsApp" ng-controller="YdsController as yds">	
+<body ng-app="ydsApp" ng-controller="YdsController as yds" ng-click="yds.closeMenus($event)">	
     <div class="menubar">
-        <div class="menubar-item">New</div><!--
-        --><div class="menubar-item">Save</div><!--
+        <div class="menubar-item" ng-click="yds.newyds()">New</div><!--
+        --><div ng-click="yds.showOpenMenu=!yds.showOpenMenu" 
+                class="menubar-item dropdown" 
+                ng-class="{'disabled':yds.shows.length===0}">Open
+            <ul class="dropdown-menu" ng-class="{'active':yds.showOpenMenu}">
+                <li class="dropdown-item" 
+                    ng-click="yds.load(show)"
+                    ng-repeat="show in yds.shows" >{{show.name}}</li>
+            </ul>
+        </div><!--
+        --><div class="menubar-item" ng-click="yds.save()">Save</div><!--
         --><div class="menubar-item">Post to imgur</div>
+        <div class="menubar-title" ng-click="yds.editTitle()">{{yds.slideshow.name || 'Enter YDS Name'}}</div>
     </div>
     <div class="sidebar">
-        <div class="sidebar-image" 
-             style="background:{{'url(' + slide.imageUrl + ')'}};background-size:cover;" 
-             ng-class="{'selected':yds.currentImage===$index}"
-             ng-click="yds.setCurrentImage($index)"
-             ng-repeat="slide in yds.slides"></div>
-
-        <div class="sidebar-add-button"></div>
+        <ul class="sidebar-images">
+            <li class="sidebar-image" 
+                 style="background:{{'url(' + slide.imageUrl + ')'}};background-size:cover;" 
+                 ng-class="{'selected':yds.currentImage===$index}"
+                 ng-click="yds.setCurrentImage($index)"
+                 ng-repeat="slide in yds.slides"></li>
+        </ul>
+        <div class="sidebar-add-button" ng-click="yds.addSlide()"></div>
     </div><!--
-    --><div class="editor">
-        <div class="current-image" ng-click="yds.clearSelection($event)" style="background:{{'url(' + yds.slides[yds.currentImage].imageUrl + ')'}};background-size:cover;">
+    --><div ng-click="yds.clearSelection($event)" class="editor">
+        <div class="current-image" 
+             ng-click="yds.clearSelection($event)" 
+             ng-dblclick="yds.addText($event)"
+             style="background:{{'url(' + yds.slides[yds.currentImage].imageUrl + ')'}};background-size:cover;">
             <div class="text" 
-                 contenteditable="{{yds.selectedText===$index&&yds.isContentEditable}}"
-                 style="top:{{line.top+'px'}};left:{{line.left+'px'}};color:{{line.color}};font-size:{{line.size+'px'}}"
-                 ng-dblclick="yds.isContentEditable=true"
+                 contenteditable 
+                 style="transform:rotate({{line.rot+'deg'}});top:{{line.top+'px'}};left:{{line.left+'px'}};color:{{line.color}};font-size:{{line.size+'px'}}"
+                 val="line.content"
                  ng-class="{'selected':yds.selectedText===$index}"
                  ng-click="yds.editText($index, $event)"
                  ng-repeat="line in yds.slides[yds.currentImage].text"
-                 ng-model="line.content">{{line.content}}</div>
-            <!--div class="text selected" contenteditable="true" style="top: 300px;left 130px;">But we hate Harold!</div-->
+                 ng-model="line.content"></div>
         </div>
         <div class="editor-controls">
             <div class="control control-font-size">
@@ -57,3 +71,5 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+<!--="{{yds.selectedText===$index&&yds.isContentEditable}}"-->

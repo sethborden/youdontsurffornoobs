@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="reset.css">
 </head>
 <body ng-app="ydsApp" ng-controller="YdsController as yds" ng-click="yds.closeMenus($event)">	
+    <div class="preview" ng-click="yds.togglePreview()">
+        <div class="preview-container"></div>
+    </div>
     <div class="menubar">
         <div class="menubar-item" ng-click="yds.newyds()">New</div><!--
         --><div ng-click="yds.showOpenMenu=!yds.showOpenMenu" 
@@ -24,7 +27,7 @@
             </ul>
         </div><!--
         --><div class="menubar-item" ng-click="yds.save()">Save</div><!--
-        --><div class="menubar-item">Post to imgur</div>
+        --><div class="menubar-item" ng-click="yds.render()">Post to imgur</div>
         <div class="menubar-title" ng-click="yds.editTitle()">{{yds.slideshow.name || 'Enter YDS Name'}}</div>
     </div>
     <div class="sidebar">

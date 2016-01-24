@@ -1,3 +1,26 @@
+.preview {
+    position: absolute;
+    width: 95%;
+    height: 95vh;
+    display: none;
+    z-index: 1000;
+    background: black;
+    top: 2.5vh;
+    left: 2.5%;
+    border-radius: 20px;
+    overflow-y: auto;
+}
+
+.preview-container {
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    top: 2.5vh;
+    bottom: 2.5vh;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
 
 .menubar {
     display: block;

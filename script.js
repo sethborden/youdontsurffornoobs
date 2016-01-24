@@ -1,13 +1,21 @@
 'use strict';
 
 angular.module('ydsApp', ['ngSanitize'])
-.controller('YdsController', function($scope, $window, slideStorage) {
+.controller('YdsController', function($scope, $window, slideStorage, render) {
     var vm = this;
     vm.currentImage = 0;
     vm.selectedText = -1;
     vm.isContentEditable = false;
+    vm.togglePreview = function() { $('.preview').toggle(); };
     vm.shows = slideStorage.index();
     vm.showOpenMenu = false;
+    vm.render = function() {
+        render.render(vm.slideshow)
+        .then(function(preview) {
+            $('.preview-container').html(preview);
+            $('.preview').show();
+        });
+    };
     vm.closeMenus = function(e) {
         var ignore = ['dropdown-item', 'menubar-item dropdown'];
         if(ignore.indexOf(e.target.className) === -1) {
@@ -28,7 +36,7 @@ angular.module('ydsApp', ['ngSanitize'])
                 imageUrl:'http://thumb9.shutterstock.com/display_pic_with_logo/1357345/139099052/stock-photo-happy-doctor-man-showing-heart-shape-139099052.jpg',
                 text: [
                     {rot: 0, size: 50, top: 30, left: 30, color: 'green', content: 'My heart is this big.'},
-                    {rot: 10, size: 50, top: 300, left: 30, color: 'green', content: 'But I still fucking hate Harold!'}
+                    {rot: 10, size: 50, top: 300, left: 30, color: 'green', content: 'But I still hate Harold!'}
                 ]
             }
         ]
@@ -242,4 +250,41 @@ angular.module('ydsApp', ['ngSanitize'])
     };
 
     return slides;
+})
+.factory('render', function() {
+    //{
+    //    imageUrl:'http://thumb7.shutterstock.com/display_pic_with_logo/64260/292334429/stock-photo-hospital-profession-people-and-medicine-concept-group-of-happy-doctors-at-hospital-292334429.jpg',
+    //    text: [
+    //        {size: 50, top: 30, left: 30, color: 'green', content: 'We\'re very smart.'},
+    //        {size: 50, top: 300, left: 30, color: 'green', content: 'But we hate Harold!'}
+    //    ]
+    //},
+    var render = {};
+    render.render = function(slideshow) {
+        return new Promise(function(resolve) {
+            var masterCanvas = document.createElement('canvas');
+            var masterCtx = masterCanvas.getContext('2d');
+            var h = $('.current-image').height();
+            var w = $('.current-image').width();
+            masterCanvas.height =  h * slideshow.slides.length;
+            masterCanvas.width = w;
+            slideshow.slides.forEach(function(s, i) {
+                var image = new Image();
+                image.src = s.imageUrl;
+                image.onload = function() {
+                    masterCtx.drawImage(image, 0, h * i, w, h);
+                    s.text.forEach(function(t) {
+                        masterCtx.font = t.size + 'px/100% cursive';
+                        masterCtx.fillStyle = t.color;
+                        masterCtx.fillText(t.content, t.left, t.top + (h * i) + 71);
+                    });
+                    if(i === slideshow.slides.length - 1) {
+                        resolve(masterCanvas);
+                    }
+                };
+            });
+        });
+    };
+
+    return render;
 });

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="reset.css">
 </head>
-<body ng-app="ydsApp" ng-controller="YdsController as yds" ng-click="yds.closeMenus($event)">	
+<body ng-mouseup="yds.dragEnd($event)" ng-mousemove="yds.dragProgress($event)" ng-app="ydsApp" ng-controller="YdsController as yds" ng-click="yds.closeMenus($event)">	
     <div class="preview" ng-click="yds.togglePreview()">
         <div class="preview-container"></div>
     </div>
@@ -42,7 +42,7 @@
         </ul>
         <div class="sidebar-add-button" ng-click="yds.addSlide()"></div>
     </div><!--
-    --><div ng-click="yds.clearSelection($event)" class="editor">
+    --><div  ng-click="yds.clearSelection($event)" class="editor">
         <div class="current-image" 
              ng-click="yds.clearSelection($event)" 
              ng-dblclick="yds.addText($event)"
@@ -54,9 +54,11 @@
                  ng-click="yds.editText($index, $event)"
                  ng-repeat="line in yds.slides[yds.currentImage].text"
                  ng-model="line.content">
-                 <input style="color:{{line.color}};font-size:{{line.size+'px'}}" ng-model="line.content">
+                 <textarea rows="1" cols="18" style="color:{{line.color}};font-size:{{line.size+'px'}}" ng-model="line.content"></textarea>
                  <div class="text-mover">+</div>
                  <div class="text-delete" ng-click="yds.delText($index)">x</div>
+                 <div class="text-rotate" ng-mousedown="yds.dragStart($event)"
+                     >&#x21bb;</div>
              </div>
         </div>
         <div class="editor-controls">
@@ -77,6 +79,7 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script src="jquery-grab-bag.js"></script>
 </body>
 </html>
 

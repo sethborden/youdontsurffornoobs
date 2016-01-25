@@ -61,8 +61,8 @@ angular.module('ydsApp', ['ngSanitize'])
         }).on('dragstop', function(e) {
             var top = $(e.target).css('top').replace('px', '');
             var left = $(e.target).css('left').replace('px', '');
-            vm.slides[vm.currentImage].text[vm.selectedText].top = top;
-            vm.slides[vm.currentImage].text[vm.selectedText].left = left;
+            vm.slides[vm.currentImage].text[vm.selectedText].top = parseInt(top);
+            vm.slides[vm.currentImage].text[vm.selectedText].left = parseInt(left);
         });
         vm.selectedText = idx;
     };
@@ -136,6 +136,56 @@ angular.module('ydsApp', ['ngSanitize'])
         };
         vm.slides = vm.slideshow.slides;
     };
+    vm.dragInfo = {};
+    vm.dragInfo.dragging = false;
+
+    /// Gotta put event listeners somewhere....why not here?
+    vm.dragStart = function(e) {
+        vm.dragInfo = {
+            tgt: $(e.target).parent(), 
+            dragging: true,
+            dragX: e.pageX,
+            dragY: e.pageY,
+        };
+        vm.dragInfo.offsetX = parseFloat(vm.dragInfo.tgt.css('left'));
+        vm.dragInfo.offsetY = parseFloat(vm.dragInfo.tgt.css('top'));
+        vm.dragInfo.lastAngle = vm.dragInfo.tgt.css('transform') === 'none' ? 0 : 
+            vm.dragInfo.tgt.css('transform').replace(/^[0-9.]/, ''); 
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    vm.dragProgress = function(e) {
+        if(vm.dragInfo.dragging) {
+            var startX = e.pageX;
+            var startY = e.pageY;
+            var degrees, startRads;
+            if(startX !== vm.dragInfo.offsetX && startY !== vm.dragInfo.offsetY) {
+                startRads = Math.atan2(startY - vm.dragInfo.offsetY, startX - vm.dragInfo.offsetX);
+                startRads -= Math.atan2(vm.dragInfo.dragY - vm.dragInfo.offsetY, vm.dragInfo.dragX - vm.dragInfo.offsetX);
+                startRads += vm.dragInfo.lastAngle;
+                degrees = (startRads * (360 / (2 * Math.PI)));
+                vm.dragInfo.tgt.css('transform-origin', '50% 50%');
+                vm.dragInfo.tgt.css('transform', 'rotate(' + degrees + 'deg)');
+            }
+        }
+    };
+
+    vm.dragEnd = function(e) {
+        if(vm.dragInfo.dragging) {
+            var startX = e.pageX;
+            var startY = e.pageY;
+            var degrees, startRads;
+            vm.dragInfo.dragging = false;
+            startRads = Math.atan2(startY - vm.dragInfo.offsetY, startX - vm.dragInfo.offsetX);
+            startRads -= Math.atan2(vm.dragInfo.dragY - vm.dragInfo.offsetY, vm.dragInfo.dragX - vm.dragInfo.offsetX);
+            startRads += vm.dragInfo.lastAngle;
+            degrees = (startRads * (360 / (2 * Math.PI)));
+            vm.slides[vm.currentImage].text[vm.selectedText].rot = degrees;
+        }
+    };
+
+    $('textarea').autogrow();
 
     $('.sidebar').on('dragover', function(e) {
         e.preventDefault();
@@ -181,34 +231,6 @@ angular.module('ydsApp', ['ngSanitize'])
     });
 
     return vm;
-})
-.directive('contenteditable', function($sce) {
-    return {
-        restrict: 'A',
-        require: '?ngModel',
-        scope: {val: '=val'},
-        link: function(scope, el, attrs, ngModel) {
-            if(!ngModel) {return;}
-            function read() {
-                var html = scope.val;
-                if(attrs.stripBr && html === '<br>') {
-                    html = '';
-                }
-                ngModel.$setViewValue(html);
-                ngModel.$render();
-            }
-
-            ngModel.$render = function() {
-                el.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
-            };
-
-            el.on('blur keyup change', function(){
-                scope.val = el.html();
-                scope.$evalAsync(read);
-            });
-            read();
-        }
-    };
 })
 .factory('slideStorage', function($window) {
     var slides = {};
@@ -275,6 +297,7 @@ angular.module('ydsApp', ['ngSanitize'])
     //},
     var render = {};
     render.render = function(slideshow) {
+        console.log(slideshow);
         return new Promise(function(resolve) {
             var masterCanvas = document.createElement('canvas');
             var masterCtx = masterCanvas.getContext('2d');

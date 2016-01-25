@@ -191,22 +191,26 @@
     border: 1px solid rgba(0, 0, 0, 0.0);
 }
 
-.text > input {
+.text > textarea {
     background: none;
     font-family: Comic Sans, Comic Sans MS, cursive;
     padding: 0;
     margin: 0;
     z-index: 200;
     border: none;
-    width: 100%;
-    height: 100%;
+    resize: none;
+    margin-bottom: -4px;
 }
 
-.text > .text-mover, .text > .text-delete {
+.text > .text-mover, 
+.text > .text-delete,
+.text > .text-rotate {
     display: none;
 }
 
-.text.selected > .text-mover, .text.selected > .text-delete {
+.text.selected > .text-mover, 
+.text.selected > .text-delete,
+.text.selected > .text-rotate {
     font-family: Roboto, Arial, sans-serif;
     cursor: move;
     font-weight: 800;
@@ -230,25 +234,19 @@
     cursor: pointer;
 }
 
+.text.selected > .text-rotate {
+    left: 100%;
+    top: 100%;
+    cursor: pointer;
+}
+
 .current-image .text.selected {
     border: 1px dashed black;
 }
 
-//.current-image .text.selected:after {
-//    content: '\21bb';
-//    position: absolute;
-//    display: block;
-//    bottom: -22px;
-//    right: -22px;
-//    height: 20px;
-//    width: 20px;
-//    background: white;
-//    border: 1px solid black;
-//    color: black;
-//    padding-top: 0;
-//    font-size: 20px;
-//    text-align: center;
-//}
+.text.selected > textarea {
+    resize: both;
+}
 
 .editor-controls {
     border: 1px solid black;

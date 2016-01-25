@@ -52,24 +52,31 @@ angular.module('ydsApp', ['ngSanitize'])
         vm.selectedText = -1;
         vm.currentImage = idx;
     };
+
     vm.editText = function(idx, e) {
-        $(e.target).draggable({
-            containment: $('.editor')
-        }).on('dragstop', function() {
-            var top = e.target.style.top.replace('px', '');
-            var left = e.target.style.left.replace('px', '');
+        var tgt = $(e.target).parent();
+        tgt.draggable({
+            containment: $('.editor'),
+            handle: '.text-mover'
+        }).on('dragstop', function(e) {
+            var top = $(e.target).css('top').replace('px', '');
+            var left = $(e.target).css('left').replace('px', '');
             vm.slides[vm.currentImage].text[vm.selectedText].top = top;
             vm.slides[vm.currentImage].text[vm.selectedText].left = left;
         });
         vm.selectedText = idx;
     };
+
     vm.clearSelection = function(e) {
         if(e.target.className==='current-image' || e.target.className==='editor') {
             vm.selectedText = -1;
-            vm.isContentEditable = false;
-            $('.ui-draggable').draggable('destroy');
+            try {
+                $('.ui-draggable').draggable('destroy');
+            } catch(e) {
+            }
         }
     };
+
     vm.isColor = function(c) {
         if(vm.selectedText > -1) {
             return vm.slides[vm.currentImage].text[vm.selectedText].color === c;
@@ -88,7 +95,11 @@ angular.module('ydsApp', ['ngSanitize'])
             });
         }
     };
+    vm.delSlide = function(idx) {
+        vm.slides.splice(idx, 1);
+    };
     vm.addText = function(e) {
+        console.log(e);
         $window.getSelection().empty();
         if(e.target.className==='current-image') {
             vm.slides[vm.currentImage].text.push({
@@ -102,6 +113,9 @@ angular.module('ydsApp', ['ngSanitize'])
             vm.isContentEditable = true;
 
         }
+    };
+    vm.delText = function(idx) {
+        vm.slides[vm.currentImage].text.splice(idx, 1);
     };
 
     vm.save = function() {

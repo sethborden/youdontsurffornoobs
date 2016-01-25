@@ -68,6 +68,7 @@
     position: absolute;
     margin-top: 1px;
     width: 100%;
+    z-index: 900;
 }
 
 .dropdown-menu .dropdown-item {
@@ -111,7 +112,31 @@
     margin-right: auto;
     cursor: pointer;
     border-radius: 5px;
+    position: relative;
+    z-index: 500;
 }
+
+.sidebar-delete {
+    position: absolute;
+    top: 0.2em;
+    right: 0.2em;
+    display: block;
+    opacity: 0;
+    height: 1em;
+    width: 1em;
+    background: crimson;
+    line-height: 1em;
+    font-family: Roboto, Arial, sans-serif;
+    color: white;
+    border-radius: 5em;
+    padding: 0.2em;
+    transition: 0.3s;
+}
+
+.sidebar-image:hover > .sidebar-delete {
+    opacity: 1;
+}
+
 
 .sidebar-image.selected {
     border: 2px solid #ccc;
@@ -157,20 +182,56 @@
 }
 
 .current-image .text {
-    font-size: 50px;
-    font-family: Comic Sans, Comic Sans MS, cursive;
-    color: green;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+    text-shadow: 3px 3px 5px #222;
     position: absolute;
     cursor: default;
-    padding-top: 20px;
-    padding-bottom: 20px;
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.0);
 }
 
+.text > input {
+    background: none;
+    font-family: Comic Sans, Comic Sans MS, cursive;
+    padding: 0;
+    margin: 0;
+    z-index: 200;
+    border: none;
+    width: 100%;
+    height: 100%;
+}
+
+.text > .text-mover, .text > .text-delete {
+    display: none;
+}
+
+.text.selected > .text-mover, .text.selected > .text-delete {
+    font-family: Roboto, Arial, sans-serif;
+    cursor: move;
+    font-weight: 800;
+    -webkit-text-stroke-width: 0;
+    position: absolute;
+    top: -22px;
+    left: -22px;
+    height: 20px;
+    display: block;
+    text-align: center;
+    line-height: 20px;
+    text-shadow: none;
+    width: 20px;
+    background: white;
+    border: 1px solid black;
+}
+
+.text.selected > .text-delete {
+    left: calc(100%);
+    top: -22px;
+    cursor: pointer;
+}
+
 .current-image .text.selected {
     border: 1px dashed black;
-    cursor: move;
 }
 
 //.current-image .text.selected:after {
@@ -188,10 +249,6 @@
 //    font-size: 20px;
 //    text-align: center;
 //}
-
-.current-image .text.selected[contenteditable="true"] {
-    cursor: text;
-}
 
 .editor-controls {
     border: 1px solid black;

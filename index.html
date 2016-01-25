@@ -36,7 +36,9 @@
                  style="background:{{'url(' + slide.imageUrl + ')'}};background-size:cover;" 
                  ng-class="{'selected':yds.currentImage===$index}"
                  ng-click="yds.setCurrentImage($index)"
-                 ng-repeat="slide in yds.slides"></li>
+                 ng-repeat="slide in yds.slides">
+                 <div class="sidebar-delete" ng-click="yds.delSlide($index)">X</div>
+            </li>
         </ul>
         <div class="sidebar-add-button" ng-click="yds.addSlide()"></div>
     </div><!--
@@ -46,13 +48,16 @@
              ng-dblclick="yds.addText($event)"
              style="background:{{'url(' + yds.slides[yds.currentImage].imageUrl + ')'}};background-size:cover;">
             <div class="text" 
-                 contenteditable 
-                 style="transform:rotate({{line.rot+'deg'}});top:{{line.top+'px'}};left:{{line.left+'px'}};color:{{line.color}};font-size:{{line.size+'px'}}"
+                 style="transform:rotate({{line.rot+'deg'}});top:{{line.top+'px'}};left:{{line.left+'px'}};"
                  val="line.content"
                  ng-class="{'selected':yds.selectedText===$index}"
                  ng-click="yds.editText($index, $event)"
                  ng-repeat="line in yds.slides[yds.currentImage].text"
-                 ng-model="line.content"></div>
+                 ng-model="line.content">
+                 <input style="color:{{line.color}};font-size:{{line.size+'px'}}" ng-model="line.content">
+                 <div class="text-mover">+</div>
+                 <div class="text-delete" ng-click="yds.delText($index)">x</div>
+             </div>
         </div>
         <div class="editor-controls">
             <div class="control control-font-size">
